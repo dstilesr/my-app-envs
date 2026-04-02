@@ -42,3 +42,5 @@ terraform.rc
 .idea/
 
 **/backend.config
+
+**/bin/
