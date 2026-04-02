@@ -38,3 +38,7 @@ terraform.rc
 
 **/.DS_Store
 **/.task/
+
+.idea/
+
+**/backend.config

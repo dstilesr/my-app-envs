@@ -1,0 +1,4 @@
+bucket = "your-states-bucket"
+region = "us-west-2"
+use_lockfile = true
+key = "your/key.tfstate"
