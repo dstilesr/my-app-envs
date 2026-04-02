@@ -1,0 +1,56 @@
+version: "3"
+tasks:
+  build-go-image:
+    desc: Build go image for DB stopper function
+    dir: "db-shutdown"
+    sources:
+      - "**/*.go"
+      - "go.mod"
+      - "go.sum"
+    cmds:
+      - go build -o ./bin/bootstrap
+      - cd ./bin && zip bootstrap.zip bootstrap
+
+  init-group:
+    desc: Initialize a resource group template with terraform
+    sources:
+      - "main.tf"
+    requires:
+      vars:
+        - "GROUP"
+        - "PROVIDER"
+    dir: "{{.PROVIDER}}/{{.GROUP}}/template"
+    cmd: terraform init -backend-config=../values/backend.config
+
+  validate-group:
+    desc: Validate a resource group template with terraform
+    sources:
+      - "*.tf"
+    requires:
+      vars:
+        - "GROUP"
+        - "PROVIDER"
+    dir: "{{.PROVIDER}}/{{.GROUP}}/template"
+    cmds:
+      - task: init-group
+        vars:
+          PROVIDER: "{{.PROVIDER}}"
+          GROUP: "{{.GROUP}}"
+      - terraform validate
+
+  deploy-group:
+    desc: Deploy a specific resource group with Terraform
+    deps:
+      - "build-go-image"
+    requires:
+      vars:
+        - "GROUP"
+    dir: '{{.PROVIDER | default "aws"}}/{{.GROUP}}/template'
+    cmds:
+      - task: validate-group
+        vars:
+          PROVIDER: "{{.PROVIDER}}"
+          GROUP: "{{.GROUP}}"
+
+      - terraform apply -auto-approve -input=false -var-file=../values/terraform.tfvars
+
