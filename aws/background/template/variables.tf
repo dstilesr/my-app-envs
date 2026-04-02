@@ -16,3 +16,9 @@ variable "lambda_memory" {
   description = "Memory (MB) to assign to lambda functions here"
   default     = 128
 }
+
+variable "lambda_kickoff_schedule" {
+  type        = string
+  description = "Schedule expression to kickoff the lambda periodically"
+  default     = "rate(5 minutes)"
+}

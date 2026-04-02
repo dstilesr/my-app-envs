@@ -40,3 +40,44 @@ resource "aws_iam_role_policy_attachment" "db_stopper" {
   role       = aws_iam_role.db_stopper.name
 }
 
+
+resource "aws_iam_role" "schedule" {
+  name = "${var.project}-scheduler-role-${var.region}"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect    = "Allow"
+      Principal = { Service = "scheduler.amazonaws.com" }
+      Action    = "sts:AssumeRole"
+    }]
+  })
+}
+
+
+data "aws_iam_policy_document" "schedule" {
+  version = "2012-10-17"
+  statement {
+    sid    = "InvokeLambdaFunction"
+    effect = "Allow"
+    actions = [
+      "lambda:InvokeFunction",
+      "lambda:InvokeAsync",
+      "lambda:ListTags",
+      "lambda:GetFunction",
+    ]
+    resources = [
+      aws_lambda_function.db_stopper.arn
+    ]
+  }
+}
+
+resource "aws_iam_policy" "schedule" {
+  name   = "${var.project}-schedule-${var.region}"
+  policy = data.aws_iam_policy_document.schedule.json
+}
+
+resource "aws_iam_role_policy_attachment" "schedule" {
+  policy_arn = aws_iam_policy.schedule.arn
+  role       = aws_iam_role.schedule.name
+}
