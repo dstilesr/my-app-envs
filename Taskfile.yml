@@ -74,3 +74,11 @@ tasks:
 
       - terraform destroy -auto-approve -input=false -var-file=../values/terraform.tfvars
 
+  kubeconfig-aws:
+    desc: Update kubeconfig from an AWS EKS cluster
+    dir: "aws/cluster/template"
+    cmd: |
+      aws eks update-kubeconfig \
+              --name $(terraform output -raw cluster_name) \
+              --region $(terraform output -raw region)
+
