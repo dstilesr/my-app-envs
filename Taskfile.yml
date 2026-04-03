@@ -54,3 +54,19 @@ tasks:
 
       - terraform apply -auto-approve -input=false -var-file=../values/terraform.tfvars
 
+  remove-group:
+    desc: Delete a specific resource group with Terraform
+    deps:
+      - "build-go-image"
+    requires:
+      vars:
+        - "GROUP"
+    dir: '{{.PROVIDER | default "aws"}}/{{.GROUP}}/template'
+    cmds:
+      - task: validate-group
+        vars:
+          PROVIDER: "{{.PROVIDER}}"
+          GROUP: "{{.GROUP}}"
+
+      - terraform destroy -auto-approve -input=false -var-file=../values/terraform.tfvars
+
