@@ -1,5 +1,9 @@
 version: "3"
 tasks:
+  format:
+    desc: Format Terraform code files
+    cmd: terraform fmt -recursive .
+
   build-go-image:
     desc: Build go image for DB stopper function
     dir: "db-shutdown"

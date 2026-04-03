@@ -24,5 +24,22 @@ variable "kubernetes_bootstrap_addons" {
 
 variable "cluster_subnets" {
   description = "Subnets in which to deploy the cluster"
-  type = list(string)
+  type        = list(string)
+}
+
+variable "node_groups" {
+  description = "Configurations for the node groups"
+
+  type = map(object({
+    scaling_config = object({
+      desired_size = number
+      min_size     = number
+      max_size     = number
+    })
+    instance_types = list(string)
+    capacity_type  = string # ON_DEMAND / SPOT
+    ami_type       = string
+    subnets        = list(string)
+  }))
+  default = {}
 }
