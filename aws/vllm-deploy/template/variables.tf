@@ -40,3 +40,22 @@ variable "remote_hf_token_secret" {
   description = "Name of HF token secret"
 }
 
+#################################################
+# Service
+#################################################
+variable "service_llm_path" {
+  type        = string
+  description = "Path of the HuggingFace LLM to deploy"
+}
+
+variable "service_image" {
+  type        = string
+  description = "Docker image of the service for VLLM"
+  default     = "vllm/vllm-openai"
+}
+
+variable "service_image_tag" {
+  type        = string
+  description = "Image tag for the service Docker image"
+  default     = "v0.19.0"
+}
