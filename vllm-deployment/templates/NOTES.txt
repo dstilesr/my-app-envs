@@ -1,0 +1,11 @@
+The VLLM service has been deployed!
+
+- Instance: {{ .Values.instanceName }}
+- LLM Model: {{ .Values.llm.modelPath }}
+- Internal URL: http://{{- include "vllm-deployment.fullname" -}}.{{ .Release.Namespace }}.svc.cluster.local
+
+To port-forward the service to your local machine:
+
+  kubectl port-forward svc/{{ include "vllm-deployment.fullname" . }} {{ .Values.service.port }}:{{ .Values.service.port }} -n {{ .Release.Namespace }}
+
+Then access it at: http://localhost:{{ .Values.service.port }}

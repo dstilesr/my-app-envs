@@ -1,0 +1,68 @@
+project: vllm-deployment
+replicaCount: 1
+instanceName: ""
+cloudProvider: ""
+llm:
+  modelPath: ""
+  maxBatchedTokens: 1024
+  hfSecretName: "vllm-hf-token"
+  hfSecretKey: "hf_token"
+
+image:
+  repository: "vllm/vllm-openai"
+  # This sets the pull policy for images.
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "v0.19.0"
+
+# This is for the secrets for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+imagePullSecrets: []
+
+# This section builds out the service account more information can be found here: https://kubernetes.io/docs/concepts/security/service-accounts/
+serviceAccount:
+  awsRoleArn: ""
+  name: ""
+
+# This is for setting up a service more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/
+service:
+  type: ClusterIP
+  port: 80
+  containerPort: 80
+
+livenessProbe:
+  httpGet:
+    path: /health
+    port: http
+readinessProbe:
+  httpGet:
+    path: /health
+    port: http
+
+tolerations:
+  - key: "nvidia.com/gpu"
+    operator: "Equal"
+    value: "true"
+    effect: "NoSchedule"
+
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: workload
+              operator: In
+              values:
+                - gpu
+
+resources:
+  limits:
+    nvidia.com/gpu: 1
+  requests:
+    nvidia.com/gpu: 1
+
+persistence:
+  enabled: true
+  size: "50Gi"
+  storageClassName: "gp2"
+  accessMode: "ReadWriteOnce"
+  mountPath: "/model-cache"

@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "vllm-deployment.fullname" . }}
+  labels:
+    {{- include "vllm-deployment.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "vllm-deployment.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "vllm-deployment.labels" . | nindent 8 }}
+    spec:
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.persistence.enabled }}
+      volumes:
+        - name: model-cache
+          persistentVolumeClaim:
+            claimName: {{ include "vllm-deployment.fullname" . }}-model-cache
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- with .Values.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- if .Values.persistence.enabled }}
+          volumeMounts:
+            - name: model-cache
+              mountPath: {{ .Values.persistence.mountPath }}
+          {{- end }}
+          env:
+            - name: "HF_TOKEN"
+              valueFrom:
+                secretKeyRef:
+                  key: {{ .Values.llm.hfSecretKey | quote }}
+                  name: {{ .Values.llm.hfSecretName | quote }}
+            - name: "HF_HOME"
+              value: {{ .Values.persistence.mountPath | quote }}
+          command: [ "/bin/sh", "-c" ]
+          args:
+            - "vllm"
+            - "serve"
+            - {{ .Values.llm.modelPath | quote }}
+            - "--trust-remote-code"
+            - "--enable-chunked-prefill"
+            - "--max_num_batched_tokens"
+            - {{ .Values.llm.maxBatchedTokens | quote }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.containerPort }}
+              hostPort: {{ .Values.service.port }}
+              protocol: TCP
+          {{- with .Values.livenessProbe }}
+          livenessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.readinessProbe }}
+          readinessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
