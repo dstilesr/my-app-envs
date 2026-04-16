@@ -40,6 +40,7 @@ variable "node_groups" {
     capacity_type  = string # ON_DEMAND / SPOT
     ami_type       = string
     subnets        = list(string)
+    labels         = map(string)
   }))
   default = {}
 }
@@ -47,9 +48,9 @@ variable "node_groups" {
 variable "addons" {
   description = "Addon specifications for the cluster"
   type = map(object({
-    addon_name            = string
-    policy_arn            = optional(string, "")
-    configuration_values  = optional(string, null)
+    addon_name           = string
+    policy_arn           = optional(string, "")
+    configuration_values = optional(string, null)
   }))
   default = {}
 }

@@ -15,9 +15,10 @@ resource "aws_eks_node_group" "main_groups" {
     min_size     = each.value.scaling_config.min_size
   }
 
-  labels = {
-    node_group_key = each.key
-  }
+  labels = merge(
+    each.value.labels,
+    { node_group_key = each.key }
+  )
 
   lifecycle {
     ignore_changes = [scaling_config[0].desired_size]
