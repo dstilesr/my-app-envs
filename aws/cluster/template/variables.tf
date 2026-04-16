@@ -43,3 +43,13 @@ variable "node_groups" {
   }))
   default = {}
 }
+
+variable "addons" {
+  description = "Addon specifications for the cluster"
+  type = map(object({
+    addon_name            = string
+    policy_arn            = optional(string, "")
+    configuration_values  = optional(string, null)
+  }))
+  default = {}
+}

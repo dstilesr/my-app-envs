@@ -55,3 +55,19 @@ resource "aws_iam_role_policy_attachment" "example-AmazonEC2ContainerRegistryRea
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
   role       = aws_iam_role.nodes.name
 }
+
+#################################################
+# Add-on specific policies
+#################################################
+locals {
+  addon_policy_list = {
+    for key, val in var.addons :
+    key => val.policy_arn if val.policy_arn != ""
+  }
+}
+
+resource "aws_iam_role_policy_attachment" "addons" {
+  for_each   = local.addon_policy_list
+  policy_arn = each.value
+  role       = aws_iam_role.nodes.name
+}

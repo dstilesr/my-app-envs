@@ -1,6 +1,6 @@
 output "region" {
   description = "AWS Region where cluster is deployed"
-  value = var.region
+  value       = var.region
 }
 
 output "cluster_arn" {
