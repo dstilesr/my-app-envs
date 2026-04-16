@@ -40,7 +40,12 @@ variable "node_groups" {
     capacity_type  = string # ON_DEMAND / SPOT
     ami_type       = string
     subnets        = list(string)
-    labels         = map(string)
+    labels = map(string)
+    taints = optional(list(object({
+      key    = string
+      value  = string
+      effect = string
+    })), [])
   }))
   default = {}
 }

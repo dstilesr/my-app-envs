@@ -20,6 +20,15 @@ resource "aws_eks_node_group" "main_groups" {
     { node_group_key = each.key }
   )
 
+  dynamic "taint" {
+    for_each = each.value.taints
+    content {
+      key    = taint.value.key
+      value  = taint.value.value
+      effect = taint.value.effect
+    }
+  }
+
   lifecycle {
     ignore_changes = [scaling_config[0].desired_size]
   }
