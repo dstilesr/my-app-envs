@@ -17,6 +17,7 @@ resource "helm_release" "nvidia_device_plugin" {
 resource "helm_release" "vllm" {
   chart     = "../../../vllm-deployment"
   atomic    = true
+  timeout   = 600
   name      = var.project
   namespace = kubernetes_namespace_v1.vllm.metadata[0].name
   set = [
