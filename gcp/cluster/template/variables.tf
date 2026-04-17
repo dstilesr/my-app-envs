@@ -12,7 +12,6 @@ variable "region" {
 variable "node_pools" {
   description = "Node pools to add to the cluster"
   type = map(object({
-    count         = number
     spot          = bool
     machine_type  = string
     oauth_scopes  = list(string)

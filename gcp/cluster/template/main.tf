@@ -14,9 +14,9 @@ provider "google" {
   project = var.project
 
   default_labels = {
-    project   = var.project
-    ManagedBy = "Terraform"
-    region    = var.region
-    component = "cluster-deployment"
+    project    = var.project
+    managed_by = "terraform"
+    region     = var.region
+    component  = "cluster-deployment"
   }
 }

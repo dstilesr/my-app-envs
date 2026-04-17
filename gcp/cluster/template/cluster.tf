@@ -1,5 +1,5 @@
 resource "google_service_account" "cluster" {
-  account_id   = "${var.project}-cluster-account"
+  account_id   = "${var.project}-k8s"
   display_name = "Cluster Account"
 }
 
@@ -12,10 +12,9 @@ resource "google_container_cluster" "main" {
 }
 
 resource "google_container_node_pool" "node_pools" {
-  for_each   = var.node_pools
-  name       = "${each.key}-node-pool"
-  cluster    = google_container_cluster.main.name
-  node_count = each.value.count
+  for_each = var.node_pools
+  name     = "${each.key}-node-pool"
+  cluster  = google_container_cluster.main.name
 
   node_config {
     machine_type              = each.value.machine_type
