@@ -37,10 +37,11 @@ variable "node_groups" {
       max_size     = number
     })
     instance_types = list(string)
-    capacity_type  = string # ON_DEMAND / SPOT
+    capacity_type  = optional(string, "SPOT") # ON_DEMAND / SPOT
     ami_type       = string
     subnets        = list(string)
     labels         = map(string)
+    disk_size      = optional(number, 64)
     taints = optional(list(object({
       key    = string
       value  = string
@@ -53,9 +54,10 @@ variable "node_groups" {
 variable "addons" {
   description = "Addon specifications for the cluster"
   type = map(object({
-    addon_name           = string
-    policy_arn           = optional(string, "")
-    configuration_values = optional(string, null)
+    addon_name               = string
+    policy_arn               = optional(string, "")
+    configuration_values     = optional(string, null)
+    service_account_role_arn = optional(string, null)
   }))
   default = {}
 }

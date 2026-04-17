@@ -71,3 +71,38 @@ resource "aws_iam_role_policy_attachment" "addons" {
   policy_arn = each.value
   role       = aws_iam_role.nodes.name
 }
+
+#################################################
+# EBS CSI Driver IRSA
+#################################################
+locals {
+  has_ebs_csi = contains([for v in var.addons : v.addon_name], "aws-ebs-csi-driver")
+  oidc_issuer = replace(aws_iam_openid_connect_provider.cluster.url, "https://", "")
+}
+
+resource "aws_iam_role" "ebs_csi" {
+  count = local.has_ebs_csi ? 1 : 0
+  name  = "${var.project}-ebs-csi-${var.region}"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect = "Allow"
+      Principal = {
+        Federated = aws_iam_openid_connect_provider.cluster.arn
+      }
+      Action = "sts:AssumeRoleWithWebIdentity"
+      Condition = {
+        StringEquals = {
+          "${local.oidc_issuer}:sub" = "system:serviceaccount:kube-system:ebs-csi-controller-sa"
+          "${local.oidc_issuer}:aud" = "sts.amazonaws.com"
+        }
+      }
+    }]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "ebs_csi" {
+  count      = local.has_ebs_csi ? 1 : 0
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
+  role       = aws_iam_role.ebs_csi[0].name
+}

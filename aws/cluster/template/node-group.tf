@@ -8,6 +8,7 @@ resource "aws_eks_node_group" "main_groups" {
   node_group_name = "${var.project}-${each.key}-node-group"
   node_role_arn   = aws_iam_role.nodes.arn
   capacity_type   = each.value.capacity_type
+  disk_size       = each.value.disk_size
 
   scaling_config {
     desired_size = each.value.scaling_config.desired_size
