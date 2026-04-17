@@ -7,6 +7,8 @@ llm:
   maxBatchedTokens: 1024
   hfSecretName: "vllm-hf-token"
   hfSecretKey: "hf_token"
+  dtype: "bfloat16"
+  maxLen: 16384
 
 image:
   repository: "vllm/vllm-openai"

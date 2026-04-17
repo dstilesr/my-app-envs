@@ -49,15 +49,17 @@ spec:
                   name: {{ .Values.llm.hfSecretName | quote }}
             - name: "HF_HOME"
               value: {{ .Values.persistence.mountPath | quote }}
-          command: [ "/bin/sh", "-c" ]
+          command: [ "vllm", "serve" ]
           args:
-            - "vllm"
-            - "serve"
             - {{ .Values.llm.modelPath | quote }}
             - "--trust-remote-code"
             - "--enable-chunked-prefill"
             - "--max_num_batched_tokens"
             - {{ .Values.llm.maxBatchedTokens | quote }}
+            - "--dtype"
+            - {{ .Values.llm.dtype | quote }}
+            - "--max-model-len"
+            - {{ .Values.llm.maxLen | quote }}
           ports:
             - name: http
               containerPort: {{ .Values.service.containerPort }}
