@@ -4,6 +4,7 @@ resource "helm_release" "nvidia_device_plugin" {
   chart      = var.nvidia_plugin_chart
   version    = var.nvidia_plugin_version
   namespace  = var.nvidia_plugin_namespace
+  atomic     = true
 
   set = [
     {
@@ -44,7 +45,7 @@ resource "helm_release" "vllm" {
       value = var.service_image_tag
     },
     {
-      name = "persistence.size"
+      name  = "persistence.size"
       value = var.service_storage_size
     }
   ]

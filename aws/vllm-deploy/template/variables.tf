@@ -59,3 +59,30 @@ variable "service_image_tag" {
   description = "Image tag for the service Docker image"
   default     = "v0.19.0"
 }
+
+variable "service_storage_size" {
+  type        = string
+  description = "Size of the persistent storage for the HF cache volume"
+  default     = "50Gi"
+}
+
+#################################################
+# Nvidia device plugin
+#################################################
+variable "nvidia_plugin_version" {
+  type        = string
+  default     = "0.19.0"
+  description = "Version of the Nvidia device plugin to use to handle GPUs"
+}
+
+variable "nvidia_plugin_chart" {
+  type        = string
+  default     = "nvidia-device-plugin"
+  description = "Chart of the nvidia device plugin"
+}
+
+variable "nvidia_plugin_namespace" {
+  type        = string
+  default     = "kube-system"
+  description = "Namespace in which to deploy the device plugin"
+}

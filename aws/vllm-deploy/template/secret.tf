@@ -5,7 +5,7 @@ data "aws_secretsmanager_secret_version" "hf_token" {
 resource "kubernetes_secret_v1" "hf_token" {
   metadata {
     name      = "vllm-hf-token"
-    namespace = kubernetes_namespace.vllm.metadata.name
+    namespace = kubernetes_namespace_v1.vllm.metadata[0].name
   }
   type = "Opaque"
   data = {
