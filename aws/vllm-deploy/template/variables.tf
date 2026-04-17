@@ -67,6 +67,15 @@ variable "service_storage_size" {
 }
 
 #################################################
+# Storage
+#################################################
+variable "storage_volume_type" {
+  type        = string
+  default     = "gp3"
+  description = "EBS volume type to use for the model cache StorageClass"
+}
+
+#################################################
 # Nvidia device plugin
 #################################################
 variable "nvidia_plugin_version" {

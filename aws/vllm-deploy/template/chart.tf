@@ -47,8 +47,12 @@ resource "helm_release" "vllm" {
     {
       name  = "persistence.size"
       value = var.service_storage_size
+    },
+    {
+      name  = "persistence.storageClassName"
+      value = kubernetes_storage_class_v1.ebs.metadata[0].name
     }
   ]
-  depends_on = [helm_release.nvidia_device_plugin]
+  depends_on = [helm_release.nvidia_device_plugin, kubernetes_storage_class_v1.ebs]
 
 }
