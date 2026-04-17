@@ -32,4 +32,9 @@ resource "aws_eks_node_group" "main_groups" {
   lifecycle {
     ignore_changes = [scaling_config[0].desired_size]
   }
+
+  timeouts {
+    create = "18m"
+    update = "18m"
+  }
 }
