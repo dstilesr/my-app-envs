@@ -17,6 +17,7 @@ provider "aws" {
       project    = var.project
       managed_by = "Terraform"
       region     = var.region
+      component  = "cluster-deployment"
     }
   }
 }

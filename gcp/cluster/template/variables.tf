@@ -23,6 +23,6 @@ variable "node_pools" {
       total_min_node_count = optional(number)
       total_max_node_count = optional(number)
     })
-
   }))
+  default = {}
 }
