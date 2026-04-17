@@ -32,7 +32,7 @@ service:
   containerPort: 8000
 
 livenessProbe:
-  initialDelaySeconds: 120
+  initialDelaySeconds: 240
   periodSeconds: 15
   failureThreshold: 5
   httpGet:
