@@ -9,6 +9,7 @@ resource "google_container_cluster" "main" {
 
   remove_default_node_pool = true
   initial_node_count       = 1
+  deletion_protection      = var.cluster_deletion_protection
 }
 
 resource "google_container_node_pool" "node_pools" {

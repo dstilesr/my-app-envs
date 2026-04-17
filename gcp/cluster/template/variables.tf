@@ -9,6 +9,12 @@ variable "region" {
   default     = "us-central1"
 }
 
+variable "cluster_deletion_protection" {
+  type        = bool
+  default     = false
+  description = "Whether to add deletion protection to the cluster"
+}
+
 variable "node_pools" {
   description = "Node pools to add to the cluster"
   type = map(object({
