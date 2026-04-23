@@ -21,6 +21,12 @@ variable "cluster_location_suffix" {
   description = "Location for the cluster. Will be appended to the region. Leave empty for regional cluster."
 }
 
+variable "storage_volume_type" {
+  description = "Type of Persistent Disk to use for cluster StorageClasses (e.g. pd-balanced, pd-standard, pd-ssd)"
+  type        = string
+  default     = "pd-balanced"
+}
+
 variable "node_pools" {
   description = "Node pools to add to the cluster"
   type = map(object({

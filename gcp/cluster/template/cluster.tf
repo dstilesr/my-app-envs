@@ -22,6 +22,7 @@ resource "google_container_node_pool" "node_pools" {
   for_each = var.node_pools
   name     = "${each.key}-node-pool"
   cluster  = google_container_cluster.main.name
+  location = google_container_cluster.main.location
 
   node_config {
     machine_type              = each.value.machine_type
@@ -35,4 +36,16 @@ resource "google_container_node_pool" "node_pools" {
     total_max_node_count = each.value.autoscaling.total_max_node_count
     total_min_node_count = each.value.autoscaling.total_min_node_count
   }
+}
+
+resource "null_resource" "download_kubecfg" {
+  provisioner "local-exec" {
+    command = <<EOF
+      KUBECONFIG='${path.module}/kubeconfig.yaml' gcloud container clusters get-credentials ${google_container_cluster.main.name} \
+        ${var.cluster_location_suffix == "" ? "--region" : "--zone"}=${google_container_cluster.main.location} \
+        --project=${var.project}
+    EOF
+  }
+
+  depends_on = [google_container_cluster.main]
 }
