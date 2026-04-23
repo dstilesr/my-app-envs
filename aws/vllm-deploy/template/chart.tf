@@ -51,9 +51,9 @@ resource "helm_release" "vllm" {
     },
     {
       name  = "persistence.storageClassName"
-      value = kubernetes_storage_class_v1.ebs.metadata[0].name
+      value = data.terraform_remote_state.cluster.outputs.storage_class_names["ephemeral"]
     }
   ]
-  depends_on = [helm_release.nvidia_device_plugin, kubernetes_storage_class_v1.ebs]
+  depends_on = [helm_release.nvidia_device_plugin]
 
 }

@@ -40,5 +40,5 @@ output "node_group_subnets" {
 
 output "storage_class_names" {
   description = "Names for storage classes (ephemeral and persistent) created on the cluster"
-  value       = { for k, v in kubernetes_storage_class_v1.ebs : k => v.metadata.name }
+  value       = { for k, v in kubernetes_storage_class_v1.ebs : k => v.metadata[0].name }
 }
