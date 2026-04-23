@@ -37,3 +37,8 @@ output "node_group_subnets" {
   description = "Subnets for the cluster node groups"
   value       = { for k, v in aws_eks_node_group.main_groups : k => v.subnet_ids }
 }
+
+output "storage_class_names" {
+  description = "Names for storage classes (ephemeral and persistent) created on the cluster"
+  value       = { for k, v in kubernetes_storage_class_v1.ebs : k => v.metadata.name }
+}

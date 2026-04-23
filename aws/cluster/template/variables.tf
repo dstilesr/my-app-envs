@@ -27,6 +27,12 @@ variable "cluster_subnets" {
   type        = list(string)
 }
 
+variable "storage_volume_type" {
+  description = "Type of EBS volume to use for Persistent Storage Classes"
+  type        = string
+  default     = "gp3"
+}
+
 variable "node_groups" {
   description = "Configurations for the node groups"
 
