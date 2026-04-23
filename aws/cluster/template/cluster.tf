@@ -17,3 +17,16 @@ resource "aws_iam_openid_connect_provider" "cluster" {
   thumbprint_list = ["9e99a48a9960b14926bb7f3b02e22da2b0ab7280"]
   url             = aws_eks_cluster.main.identity[0].oidc[0].issuer
 }
+
+resource "null_resource" "download_kubecfg" {
+  provisioner "local-exec" {
+    command = <<EOF
+      aws eks update-kubeconfig \
+        --region ${var.region} \
+        --name ${aws_eks_cluster.main.name} \
+        --kubeconfig '${path.module}/kubeconfig.yaml'
+    EOF
+  }
+
+  depends_on = [aws_eks_cluster.main]
+}

@@ -15,6 +15,12 @@ variable "cluster_deletion_protection" {
   description = "Whether to add deletion protection to the cluster"
 }
 
+variable "cluster_location_suffix" {
+  type        = string
+  default     = "a"
+  description = "Location for the cluster. Will be appended to the region. Leave empty for regional cluster."
+}
+
 variable "node_pools" {
   description = "Node pools to add to the cluster"
   type = map(object({

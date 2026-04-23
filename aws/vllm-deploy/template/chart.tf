@@ -55,5 +55,4 @@ resource "helm_release" "vllm" {
     }
   ]
   depends_on = [helm_release.nvidia_device_plugin]
-
 }

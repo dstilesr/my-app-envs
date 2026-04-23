@@ -25,4 +25,6 @@ resource "kubernetes_storage_class_v1" "ebs" {
   parameters = {
     type = var.storage_volume_type
   }
+
+  depends_on = [null_resource.download_kubecfg]
 }

@@ -5,11 +5,17 @@ resource "google_service_account" "cluster" {
 
 resource "google_container_cluster" "main" {
   name     = "${var.project}-main-cluster"
-  location = var.region
+  location = var.cluster_location_suffix == "" ? var.region : "${var.region}-${var.cluster_location_suffix}"
 
   remove_default_node_pool = true
   initial_node_count       = 1
   deletion_protection      = var.cluster_deletion_protection
+
+  addons_config {
+    gce_persistent_disk_csi_driver_config {
+      enabled = true
+    }
+  }
 }
 
 resource "google_container_node_pool" "node_pools" {
