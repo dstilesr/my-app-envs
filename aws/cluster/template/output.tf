@@ -42,3 +42,8 @@ output "storage_class_names" {
   description = "Names for storage classes (ephemeral and persistent) created on the cluster"
   value       = { for k, v in kubernetes_storage_class_v1.ebs : k => v.metadata[0].name }
 }
+
+output "node_role_arn" {
+  value       = aws_iam_role.nodes.arn
+  description = "ARN of the shared node IAM role used by EKS node groups"
+}

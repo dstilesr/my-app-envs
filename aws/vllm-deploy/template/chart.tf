@@ -12,6 +12,8 @@ resource "helm_release" "nvidia_device_plugin" {
       value = "gpu"
     }
   ]
+
+  depends_on = [aws_eks_node_group.gpu]
 }
 
 resource "helm_release" "vllm" {

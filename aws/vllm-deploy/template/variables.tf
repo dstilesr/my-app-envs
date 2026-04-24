@@ -95,3 +95,65 @@ variable "nvidia_plugin_namespace" {
   default     = "kube-system"
   description = "Namespace in which to deploy the device plugin"
 }
+
+#################################################
+# GPU Node Group
+#################################################
+variable "gpu_node_subnets" {
+  type        = list(string)
+  description = "Subnets in which to launch GPU worker nodes"
+}
+
+variable "gpu_node_instance_types" {
+  type        = list(string)
+  description = "EC2 instance types for the GPU node group"
+  default     = ["g7e.2xlarge"]
+}
+
+variable "gpu_node_ami_type" {
+  type        = string
+  description = "EKS AMI type for GPU nodes"
+  default     = "AL2023_x86_64_NVIDIA"
+}
+
+variable "gpu_node_capacity_type" {
+  type        = string
+  description = "Capacity type for GPU nodes (SPOT or ON_DEMAND)"
+  default     = "SPOT"
+}
+
+variable "gpu_node_disk_size" {
+  type        = number
+  description = "Root disk size (GiB) for GPU nodes"
+  default     = 64
+}
+
+variable "gpu_node_desired_size" {
+  type    = number
+  default = 1
+}
+
+variable "gpu_node_min_size" {
+  type    = number
+  default = 1
+}
+
+variable "gpu_node_max_size" {
+  type    = number
+  default = 1
+}
+
+variable "gpu_node_labels" {
+  type        = map(string)
+  description = "Additional labels for the GPU node group (workload=gpu is always merged in)"
+  default     = {}
+}
+
+variable "gpu_node_taints" {
+  type = list(object({
+    key    = string
+    value  = string
+    effect = string
+  }))
+  default = []
+}
