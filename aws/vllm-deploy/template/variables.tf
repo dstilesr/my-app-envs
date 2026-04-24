@@ -10,6 +10,12 @@ variable "project" {
   description = "Name of project to assign to cluster"
 }
 
+variable "kubeconfig_path" {
+  description = "Path to KubeConfig file for cluster access"
+  default     = "../../cluster/template/kubeconfig.yaml"
+  type        = string
+}
+
 #################################################
 # Remote states
 #################################################
