@@ -15,6 +15,13 @@ resource "google_container_cluster" "main" {
     gce_persistent_disk_csi_driver_config {
       enabled = true
     }
+    http_load_balancing {
+      disabled = false
+    }
+  }
+
+  gateway_api_config {
+    channel = "CHANNEL_STANDARD"
   }
 }
 
