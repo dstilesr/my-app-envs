@@ -12,3 +12,13 @@ output "cluster_name" {
   description = "Name of the GCP cluster"
   value       = google_container_cluster.main.name
 }
+
+output "node_service_account_email" {
+  description = "Email of service account used for nodes"
+  value       = google_service_account.cluster.email
+}
+
+output "node_service_account_id" {
+  description = "ID of service account used for nodes"
+  value       = google_service_account.cluster.id
+}
