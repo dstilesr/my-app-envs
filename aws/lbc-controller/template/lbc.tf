@@ -7,17 +7,19 @@ resource "helm_release" "lb_controller" {
 
   set = [
     {
-      name = "clusterName"
+      name  = "clusterName"
       value = var.eks_cluster_name
     },
     {
-      name = "serviceAccount.create"
+      name  = "serviceAccount.create"
       value = false
     },
     {
-      name = "serviceAccount.name"
-      value = kubernetes_service_account_v1.lbc.metadata.name
+      name  = "serviceAccount.name"
+      value = local.service_account_name
     }
   ]
+
+  depends_on = [aws_iam_role_policy_attachment.lbc]
 }
 

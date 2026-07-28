@@ -15,6 +15,10 @@ resource "kubernetes_service_account_v1" "lbc" {
   }
 }
 
+locals {
+  service_account_name = kubernetes_service_account_v1.lbc.metadata[0].name
+}
+
 resource "aws_iam_role" "lbc" {
   name        = "${var.project}-${var.component}-role"
   description = "IAM Role for Load Balancer Controller"
@@ -28,7 +32,7 @@ resource "aws_iam_role" "lbc" {
         Condition = {
           StringEquals = {
             "$oidc_provider:aud" = "sts.amazonaws.com"
-            "$oidc_provider:sub" = "system:serviceaccount:${var.lbc_namespace}:${kubernetes_service_account_v1.lbc.metadata.name}"
+            "$oidc_provider:sub" = "system:serviceaccount:${var.lbc_namespace}:${local.service_account_name}"
           }
         }
     }]
