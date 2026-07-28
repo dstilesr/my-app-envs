@@ -2,6 +2,10 @@ data "aws_eks_cluster" "main" {
   name = var.eks_cluster_name
 }
 
+data "aws_iam_openid_connect_provider" "main" {
+  url = data.aws_eks_cluster.main.identity[0].oidc[0]["issuer"]
+}
+
 resource "aws_iam_policy" "lbc" {
   name        = "${var.project}-${var.component}-policy"
   policy      = file("${path.module}/lbc-iam-policy.json")
@@ -17,6 +21,7 @@ resource "kubernetes_service_account_v1" "lbc" {
 
 locals {
   service_account_name = kubernetes_service_account_v1.lbc.metadata[0].name
+  oidc_issuer          = replace(data.aws_iam_openid_connect_provider.main.url, "https://", "")
 }
 
 resource "aws_iam_role" "lbc" {
@@ -27,12 +32,12 @@ resource "aws_iam_role" "lbc" {
     Statement = [
       {
         Effect    = "Allow"
-        Principal = { Federated = data.aws_eks_cluster.main.identity[0].oidc[0]["issuer"] }
+        Principal = { Federated = data.aws_iam_openid_connect_provider.main.arn }
         Action    = "sts:AssumeRoleWithWebIdentity"
         Condition = {
           StringEquals = {
-            "$oidc_provider:aud" = "sts.amazonaws.com"
-            "$oidc_provider:sub" = "system:serviceaccount:${var.lbc_namespace}:${local.service_account_name}"
+            "${local.oidc_issuer}:aud" = "sts.amazonaws.com"
+            "${local.oidc_issuer}:sub" = "system:serviceaccount:${var.lbc_namespace}:${local.service_account_name}"
           }
         }
     }]
