@@ -43,3 +43,9 @@ variable "lbc_name" {
   default     = "aws-load-balancer-controller"
   description = "Name of Helm release for LBC."
 }
+
+variable "gateway_crds_version" {
+  default     = "1.6.1"
+  description = "Version of the gateway CRDs to install"
+  type        = string
+}
