@@ -20,6 +20,10 @@ resource "helm_release" "lb_controller" {
     {
       name  = "serviceAccount.name"
       value = local.service_account_name
+    },
+    {
+      name  = "vpcId"
+      value = data.aws_eks_cluster.main.vpc_config[0].vpc_id
     }
   ]
 
