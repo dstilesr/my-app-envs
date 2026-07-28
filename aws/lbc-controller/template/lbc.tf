@@ -6,6 +6,7 @@ resource "helm_release" "lb_controller" {
   name             = var.lbc_name
   upgrade_install  = true
   create_namespace = false
+  atomic           = true
 
   set = [
     {
