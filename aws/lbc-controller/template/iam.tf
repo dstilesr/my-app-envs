@@ -14,13 +14,16 @@ resource "aws_iam_policy" "lbc" {
 
 resource "kubernetes_service_account_v1" "lbc" {
   metadata {
-    name      = "${var.project}-${var.component}-sa"
+    name      = local.service_account_name
     namespace = var.lbc_namespace
+    annotations = {
+      "eks.amazonaws.com/role-arn" = aws_iam_role.lbc.arn
+    }
   }
 }
 
 locals {
-  service_account_name = kubernetes_service_account_v1.lbc.metadata[0].name
+  service_account_name = "${var.project}-${var.component}-sa"
   oidc_issuer          = replace(data.aws_iam_openid_connect_provider.main.url, "https://", "")
 }
 

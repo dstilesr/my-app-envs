@@ -23,6 +23,5 @@ resource "helm_release" "lb_controller" {
     }
   ]
 
-  depends_on = [aws_iam_role_policy_attachment.lbc]
+  depends_on = [aws_iam_role_policy_attachment.lbc, kubernetes_service_account_v1.lbc]
 }
-
