@@ -1,7 +1,7 @@
 resource "helm_release" "lb_controller" {
   repository       = "https://aws.github.io/eks-charts"
   chart            = "aws-load-balancer-controller"
-  namespace        = var.lbc_namespace
+  namespace        = var.namespace
   version          = var.lbc_version
   name             = var.lbc_name
   upgrade_install  = true
@@ -19,7 +19,7 @@ resource "helm_release" "lb_controller" {
     },
     {
       name  = "serviceAccount.name"
-      value = local.service_account_name
+      value = local.lbc_service_account_name
     },
     {
       name  = "vpcId"

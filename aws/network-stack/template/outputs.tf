@@ -5,6 +5,6 @@ output "lbc_iam_role_arn" {
 }
 
 output "lbc_service_account_name" {
-  value       = local.service_account_name
+  value       = local.lbc_service_account_name
   description = "Name of service account for LBC in Kubernetes"
 }

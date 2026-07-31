@@ -26,9 +26,9 @@ variable "eks_cluster_name" {
   description = "Name of EKS cluster in which to deploy"
 }
 
-variable "lbc_namespace" {
+variable "namespace" {
   default     = "kube-system"
-  description = "Namespace in which to install Load Balancer Controller"
+  description = "Namespace in which to install the Controllers"
   type        = string
 }
 
@@ -47,5 +47,11 @@ variable "lbc_name" {
 variable "gateway_crds_version" {
   default     = "1.6.1"
   description = "Version of the gateway CRDs to install"
+  type        = string
+}
+
+variable "external_dns_version" {
+  default     = "1.21.1"
+  description = "Version of the External DNS controller chart to install"
   type        = string
 }
