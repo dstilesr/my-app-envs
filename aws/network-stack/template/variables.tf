@@ -12,7 +12,7 @@ variable "project" {
 
 variable "component" {
   description = "Name of component for labelling"
-  default     = "lbc-controller"
+  default     = "network-stack"
   type        = string
 }
 

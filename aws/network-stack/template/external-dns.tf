@@ -26,6 +26,15 @@ resource "helm_release" "external_dns" {
         "eks.amazonaws.com/role-arn" = aws_iam_role.dns.arn
       }
     }
+    sources = [
+      "service",
+      "ingress",
+      "gateway-httproute",
+      "gateway-grpcroute",
+      "gateway-tlsroute",
+      "gateway-tcproute",
+      "gateway-udproute"
+    ]
   })]
 
   depends_on = [aws_iam_role_policy_attachment.dns]

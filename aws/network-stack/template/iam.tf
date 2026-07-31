@@ -97,6 +97,6 @@ resource "aws_iam_role_policy_attachment" "lbc" {
 }
 
 resource "aws_iam_role_policy_attachment" "dns" {
-  role       = aws_iam_role.dns.arn
+  role       = aws_iam_role.dns.name
   policy_arn = aws_iam_policy.dns.arn
 }
