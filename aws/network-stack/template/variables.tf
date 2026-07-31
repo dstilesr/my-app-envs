@@ -55,3 +55,17 @@ variable "external_dns_version" {
   description = "Version of the External DNS controller chart to install"
   type        = string
 }
+
+variable "external_dns_sources" {
+  type = list(string)
+  default = [
+    "service",
+    "ingress",
+    "gateway-httproute",
+    "gateway-grpcroute",
+    "gateway-tlsroute",
+    "gateway-tcproute",
+    "gateway-udproute"
+  ]
+  description = "Sources for External DNS provider to listen for"
+}
